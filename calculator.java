@@ -1,22 +1,27 @@
 import java.util.*;
 
-//1+23-456*(678/789)+10
-//111 23 + 
+
+//111 23+ 456 678 789 * -  10+
+//
 
 class Solution {
    public static void main(String[] args){
-	   String str = "111+23-45*(678/789)-10";
-	   
-	   System.out.println(infix2Postfix("a+b-c*d/e+f-g"));
+	   String str = "111+23-45*(678/789+10)-23";
+	   String str2 = "(5/9)";
+	   System.out.println(infix2Postfix(str));
    }
    
    public static int calculator(String infix){
 	   
 	   String postfix = infix2Postfix(infix);
 	   
-	   return evaluatePostfixExpression(postfix);
+	   int res = evaluatePostfixExpression(postfix);
+	   
+	   return res;
    }
-   
+//   111+23-456*(678/789)+10
+//111 23+ 456 678 789/ *- 10
+//+
    private static String infix2Postfix(String str){
 	   Stack<Character> stack = new Stack<>();
 	   StringBuilder sb = new StringBuilder();
@@ -24,20 +29,22 @@ class Solution {
 	   for(int i = 0; i < str.length(); i++){
 		   char ch = str.charAt(i);
 		   
-		   if(ch >= 'a' && ch <= 'z' ){  //Character.isDigit(ch)
+		   if(ch >= '0' && ch <= '9' ){  //Character.isDigit(ch)
 			   sb.append(ch);
 		   }else if(ch == '('){
-			   sb.append(ch);
+			   stack.push(ch);
 		   }else if(ch == ')'){
 			   while(stack.peek() != '('){
 				   sb.append(stack.pop());
 			   }
 			   stack.pop();
+			   sb.append(" ");
 		   }else{
 			   while(!stack.isEmpty() && precedence(ch) <= precedence(stack.peek()) ){
 				   sb.append(stack.pop());
 			   }
 			   stack.push(ch);
+			   sb.append(" ");
 		   }
 	   }
 	   while(!stack.isEmpty()){
