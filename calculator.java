@@ -1,17 +1,7 @@
 import java.util.*;
 
-
-//111 23+ 456 678 789 * -  10+
-//
-
-class Solution {
-   public static void main(String[] args){
-	   String str = "111+23-45*(678/789+10)-23";
-	   String str2 = "(5/9)";
-	   System.out.println(infix2Postfix(str));
-   }
-   
-   public static int calculator(String infix){
+public class Solution {
+   public int calculate(String infix){
 	   
 	   String postfix = infix2Postfix(infix);
 	   
@@ -19,10 +9,7 @@ class Solution {
 	   
 	   return res;
    }
-//   111+23-456*(678/789)+10
-//111 23+ 456 678 789/ *- 10
-//+
-   private static String infix2Postfix(String str){
+   private String infix2Postfix(String str){
 	   Stack<Character> stack = new Stack<>();
 	   StringBuilder sb = new StringBuilder();
 	   
@@ -53,7 +40,7 @@ class Solution {
 	 return sb.toString();  
    } 
    
-   private static int precedence(Character c){
+   private int precedence(Character c){
 	   Map<Character, Integer> map = new HashMap<>();
 	   map.put('(', 0);
 	   
@@ -67,8 +54,42 @@ class Solution {
 	   return map.get(c);
    }
    
-   private static int evaluatePostfixExpression(String str){
+   private int evaluatePostfixExpression(String str){
+	   Stack<Integer> stack = new Stack<>();
+	   int num = 0;
 	   
-	   return 0;
+	   for(int i = 0; i < str.length(); i++){
+		   char ch = str.charAt(i);
+		
+		   if(ch >= '0' && ch <= '9'){
+			   num = num*10 + ch-'0';
+		   }else{
+			   if(num != 0){
+				   stack.push(num);
+				   num = 0;
+			   }	  
+			 
+			   if( ch == ' '){
+				   continue;
+			   }else if(ch == '+'){
+				   int right = stack.pop();
+				   int left = stack.pop();
+				   stack.push(left + right);
+			   }else if(ch == '-'){
+				   int right = stack.pop();
+				   int left = stack.pop();
+				   stack.push(left - right);
+			   }else if(ch == '*'){
+				   int right = stack.pop();
+				   int left = stack.pop();
+				   stack.push(left * right);
+			   }else if(ch == '/'){
+				   int right = stack.pop();
+				   int left = stack.pop();
+				   stack.push(left / right);
+			   }
+		   }
+	   }
+	   return stack.pop();
    }
 }
